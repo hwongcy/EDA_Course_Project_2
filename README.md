@@ -115,5 +115,30 @@ The graph of Question 2 is as shown below:
 **Therefore, total emissions from PM2.5 have decreased in the Baltimore City from 1999 to 2008.**
 
 
+## Question 3
+
+By using the dataset of Baltimore extracted in Question 2, we can use *facet_grid* from *ggplot2* to form a matrix of panels by source type (point, nonpoint, onroad, nonroad) variable as shown below:
+
+```{r plot_q3}
+library(ggplot2)
+ggp <- ggplot(data = data.PM25.baltimore,
+              aes(x = factor(year),
+                  y = Emissions,
+                  fill = type
+                  )
+              ) +
+    geom_bar(stat = "identity") +
+    facet_grid(. ~ type) +
+    xlab("Year") +
+    ylab("PM2.5 Emission in Tons") +
+    ggtitle("Baltimore PM2.5 Emission by Source Type")
+print(ggp)
+```
+
+The graph of Question 3 is as shown below:
+
+![Plot3](plot3.png)
+
+**Therefore, only nonroad, nonpoint and onroad types have seen decreases in emission from 1999-2008 for Baltimore City.**
 
 
