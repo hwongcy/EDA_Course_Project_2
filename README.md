@@ -204,3 +204,42 @@ The graph of Question 5 is:
 **Therefore, the emissions from motor vehicles in Baltimore City have seen decreases from 1999-2008.**
 
 
+## Question 6
+
+Following Question 5, we will the extract the emission of Los Angeles as below:
+
+```{r extract_la}
+data.PM25.la <- data.PM25[data.PM25$fips=="06037",]
+emission.vehicle.la <- data.PM25.la[(data.PM25.la$SCC %in% data.SCC.vehicle$SCC), ]
+```
+
+Then, an additional field **City** is added to both Baltimore and L.A. emission datasets and both both datasets are mergered into one for plotting: 
+
+emission.vehicle.baltimore$City <- "Baltimore City"
+emission.vehicle.la$City <- "Los Angeles County"```{r add_city}
+emission.vehicle.combine <- rbind(emission.vehicle.baltimore, emission.vehicle.la)
+```
+
+The graph of the emission of motor vehicle in Baltimore and L.A. will be plotted as follows:
+
+```{r plot_q6}
+ggp <- ggplot(emission.vehicle.combine,
+              aes(x = factor(year),
+                  y = Emissions,
+                  fill = City
+                  )
+              ) +
+    geom_bar(aes(fill = year), stat = "identity") +
+    facet_grid(scales = "free", space = "free", . ~ City) +
+    guides(fill = FALSE) +
+    ylab("PM2.5 in Tons") +
+    xlab("Year") +
+    ggtitle("PM2.5 Emission of Motor Vehicles in Baltmore and L.A., 1990-2008") 
+print(ggp)
+```
+
+The graph of Question 6 is:
+
+![Plot6](plot6.png)
+
+**Therefore, Baltimore City have seen greater changes over time in motor vehicle emissions.**
