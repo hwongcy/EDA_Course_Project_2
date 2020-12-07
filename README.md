@@ -142,3 +142,35 @@ The graph of Question 3 is as shown below:
 **Therefore, only nonroad, nonpoint and onroad types have seen decreases in emission from 1999-2008 for Baltimore City.**
 
 
+## Question 4
+
+We first use *grepl* to extract SCC of Coal Combustion related records from Source Classification Code dataset and then aggreate the corresponding total emission of PM2.5 as follows:
+
+```{r extract_n_aggregate_coal_combustion}
+data.SCC.coal <- data.SCC[grepl("Fuel Comb.*Coal", data.SCC$EI.Sector), ]
+mission.coal <- data.PM25[(data.PM25$SCC %in% data.SCC.coal$SCC), ]
+emission.coal.per.year <- aggregate(Emissions ~ year, emission.coal, FUN = sum)
+```
+
+Then, the graph will be ploted as shown below:
+
+```{r plot_q4}
+ith(emission.coal.per.year, 
+     barplot(height = emission.coal.per.year$Emissions/1000, 
+             names.arg = emission.coal.per.year$year, 
+             xlab = "Year",
+             ylab = "PM2.5 in Kilotons",
+             main = "PM2.5 Emission of Coal Combustion by Year",
+             col = bar.colors
+             )
+     )
+```
+
+The graph of Question 4 is:
+
+![Plot4](plot4.png)
+
+**Therefore, the emissions from coal combustion related sources have seen decreases from 1999-2008.**
+
+
+
