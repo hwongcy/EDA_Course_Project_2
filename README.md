@@ -50,7 +50,7 @@ download.file(data.url, destfile = "./data/Dataset.zip", method = "curl")
 unzip(zipfile = "./data/Dataset.zip", exdir = "./data")
 ```
 
-Dataset will be retrieved by using **readRDS()**. For example,
+Dataset will be retrieved by using *readRDS*. For example,
 
 ```{r read_files}
 data.PM25 <- readRDS("./data/summarySCC_PM25.rds")
@@ -66,7 +66,7 @@ The total PM2.5 emssion per year is aggregated as shown below:
 emission.per.year <- aggregate(Emissions ~ year, data.PM25, FUN = sum)
 ```
 
-Then, the graphic will be plotted by base plotting system:
+Then, the graph will be plotted by base plotting system:
 
 ```{r plot_q1}
 with(emission.per.year, 
@@ -79,11 +79,40 @@ with(emission.per.year,
      )
 ```
 
-The graph is as shown below:
+The graph of Question 1 is as shown below:
 
 ![Plot1](plot1.png)
 
 **Therefore, total emissions from PM2.5 have decreased in the United States from 1999 to 2008.**
+
+
+## Question 2
+
+The PM2.5 emission of Baltimore will be extracted from original dataset and aggreate the total emission similar Question 1 by
+
+```{r extract_baltimore}
+data.baltimore <- data.PM25[data.PM25$fips=="24510",]
+emission.per.year <- aggregate(Emissions ~ year, data.baltimore, FUN = sum)
+```
+
+Then, the graph will be plotted by base plotting system similar to Question 1:
+
+```{r plot_q2}
+with(emission.per.year, 
+     barplot(height = emission.per.year$Emissions/1000, 
+             names.arg = emission.per.year$year, 
+             xlab = "Year",
+             ylab = "PM2.5 in Kilotons",
+             main = "Baltimore PM2.5 Emission by Year",
+             col = bar.colors)
+     )
+```
+
+The graph of Question 2 is as shown below:
+
+![Plot2](plot2.png)
+
+**Therefore, total emissions from PM2.5 have decreased in the Baltimore City from 1999 to 2008.**
 
 
 
