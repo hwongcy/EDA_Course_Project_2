@@ -1,4 +1,4 @@
-# Exploratory Data Analysis Course Project 2
+# README - Exploratory Data Analysis Course Project 2
 
 
 ## Purpose
@@ -42,7 +42,7 @@ There are two datasets provided which are
 
 ## Data Preparation
 
-Dataset will be downloaded and unzipped by *download.file* and *unzip* in the current directory. For example,
+Dataset will be downloaded and unzipped by *download.file* and *unzip* in the current directory as shown below:
 
 ```{r download_n_unzip}
 data.url <- "https://d396qusza40orc.cloudfront.net/exdata%2Fdata%2FNEI_data.zip"
@@ -50,10 +50,41 @@ download.file(data.url, destfile = "./data/Dataset.zip", method = "curl")
 unzip(zipfile = "./data/Dataset.zip", exdir = "./data")
 ```
 
-Dataset will be retrieved by using **readRDS()** as shown below:
+Dataset will be retrieved by using **readRDS()**. For example,
 
 ```{r read_files}
 data.PM25 <- readRDS("./data/summarySCC_PM25.rds")
 data.SCC <- readRDS("./data/Source_Classification_Code.rds")
 ```
+
+
+## Question 1
+
+The total PM2.5 emssion per year is aggregated as shown below: 
+
+```{r aggregate_total_pm25}
+emission.per.year <- aggregate(Emissions ~ year, data.PM25, FUN = sum)
+```
+
+Then, the graphic will be plotted by base plotting system:
+
+```{r plot_q1}
+with(emission.per.year, 
+     barplot(height = emission.per.year$Emissions/1000, 
+             names.arg = emission.per.year$year, 
+             xlab = "Year",
+             ylab = "PM2.5 in Kilotons",
+             main = "Total PM2.5 Emission by Year",
+             col = bar.colors)
+     )
+```
+
+The graph is as shown below:
+
+![Plot1](plot1.png)
+
+**Therefore, total emissions from PM2.5 have decreased in the United States from 1999 to 2008.**
+
+
+
 
