@@ -36,7 +36,7 @@ There are two datasets provided which are
 | type      | Type of sources (point, non-point, on-road, or non-road |
 | year      | The year of emissions recorded                          |
 
-- **Source_Classification_Code.rds**, provides a mapping from the SCC digit strings in the emission table to the actual name of the PM2.5 source.
+- **Source_Classification_Code.rds**, provides a mapping from the **SCC** digit strings in the emission table to the actual name of the PM2.5 source.
 
 
 
@@ -144,11 +144,11 @@ The graph of Question 3 is as shown below:
 
 ## Question 4
 
-We first use *grepl* to extract SCC of Coal Combustion related records from Source Classification Code dataset and then aggreate the corresponding total emission of PM2.5 as follows:
+We first use *grepl* to extract **SCC** of Coal Combustion related records from Source Classification Code dataset and then aggreate the corresponding total emission of PM2.5 as follows:
 
 ```{r extract_n_aggregate_coal_combustion}
 data.SCC.coal <- data.SCC[grepl("Fuel Comb.*Coal", data.SCC$EI.Sector), ]
-mission.coal <- data.PM25[(data.PM25$SCC %in% data.SCC.coal$SCC), ]
+emission.coal <- data.PM25[(data.PM25$SCC %in% data.SCC.coal$SCC), ]
 emission.coal.per.year <- aggregate(Emissions ~ year, emission.coal, FUN = sum)
 ```
 
@@ -172,5 +172,35 @@ The graph of Question 4 is:
 
 **Therefore, the emissions from coal combustion related sources have seen decreases from 1999-2008.**
 
+
+## Question 5
+
+It is assumed that the source type, **Onroad** represents the motor vehicles. Then, the **SCC** of the motor vehicles related records from the Source Classification Code dataset will be extracted and the corresponding emssions in Baltimore will be aggregated as follows:
+
+```{r extract_n_aggreate_onroad}
+data.SCC.vehicle <- data.SCC[data.SCC$Data.Category=="Onroad", ]
+data.PM25.baltimore <- data.PM25[data.PM25$fips=="24510",]
+emission.vehicle <- data.PM25.baltimore[(data.PM25.baltimore$SCC %in% data.SCC.vehicle$SCC), ]
+emission.vehicle.per.year <- aggregate(Emissions ~ year, emission.vehicle, FUN = sum)
+```
+
+The graph will be ploted as below:
+
+```{r plot_q5}
+with(emission.vehicle.per.year, 
+     barplot(height = emission.vehicle.per.year$Emissions, 
+             names.arg = emission.vehicle.per.year$year, 
+             xlab = "Year",
+             ylab = "PM2.5 in Tons",
+             main = "Motor Vehicle PM2.5 Emission in Baltimore by Year",
+             col = bar.colors)
+     )
+```
+
+The graph of Question 5 is:
+
+![Plot5](plot5.png)
+
+**Therefore, the emissions from motor vehicles in Baltimore City have seen decreases from 1999-2008.**
 
 
